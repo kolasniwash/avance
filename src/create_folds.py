@@ -7,6 +7,7 @@ def dataset(folds=5, test_size=0.1):
 
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
     df = df.rename(columns={"status": "target"})
+    df = df.fillna(0)
 
     test_size = int(df.shape[0] * (1 - test_size))
 
