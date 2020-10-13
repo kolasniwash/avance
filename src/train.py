@@ -1,11 +1,14 @@
+import os
 import pandas as pd
 
 from sklearn import tree, metrics
 import joblib
 
+import config
+
 
 def run(fold):
-    df = pd.read_csv("../input/train_folds.csv")
+    df = pd.read_csv(config.TRAINING_PATH)
 
     df_train = df[df.kfold != fold].reset_index(drop=True)
     df_valid = df[df.kfold == fold].reset_index(drop=True)
@@ -27,9 +30,9 @@ def run(fold):
 
     print(f"Fold={fold}, Accuracy={accuracy}, ROC_AUC={roc_auc}")
 
-    joblib.dump(clf, f"../models/dt_{fold}.bin")
+    joblib.dump(clf, os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin"))
 
 if __name__ == "__main__":
 
-    for fold in range(5):
+    for fold in range(config.N_KFOLDS):
         run(fold)
