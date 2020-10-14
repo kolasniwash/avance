@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--fold", type=int, default=None)
-    parser.add_argument("--model", type=str, default="tree-gini")
+    parser.add_argument("--model", type=str, default=config.DEFAULT_MODEL)
     parser.add_argument("--train_path", type=str, default=config.TRAINING_PATH)
     parser.add_argument("--output_path", type=str, default=config.MODEL_OUTPUT)
 
