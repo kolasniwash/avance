@@ -3,12 +3,14 @@ import pandas as pd
 
 from sklearn import tree, metrics
 import joblib
+import argparse
 
 import config
+import model_dispatcher
 
 
-def run(fold):
-    df = pd.read_csv(config.TRAINING_PATH)
+def run(fold, model, train_path, output_path):
+    df = pd.read_csv(train_path)
 
     df_train = df[df.kfold != fold].reset_index(drop=True)
     df_valid = df[df.kfold == fold].reset_index(drop=True)
@@ -19,7 +21,7 @@ def run(fold):
     x_valid = df_valid.drop(["target", "kfold"], axis=1)
     y_valid = df_valid.target
 
-    clf = tree.DecisionTreeClassifier()
+    clf = model_dispatcher.models[model]
 
     clf.fit(x_train, y_train)
 
@@ -30,9 +32,25 @@ def run(fold):
 
     print(f"Fold={fold}, Accuracy={accuracy}, ROC_AUC={roc_auc}")
 
-    joblib.dump(clf, os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin"))
+    joblib.dump(clf, os.path.join(output_path, f"dt_{fold}.bin"))
 
 if __name__ == "__main__":
 
-    for fold in range(config.N_KFOLDS):
-        run(fold)
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--fold", type=int, default=None)
+    parser.add_argument("--model", type=str, default="tree-gini")
+    parser.add_argument("--train_path", type=str, default=config.TRAINING_PATH)
+    parser.add_argument("--output_path", type=str, default=config.MODEL_OUTPUT)
+
+    args = parser.parse_args()
+
+    model = args.model
+    train_path = args.train_path
+    output_path = args.output_path
+
+    if args.fold is None:
+        for fold in range(config.N_KFOLDS):
+            run(fold, model, train_path, output_path)
+    else:
+        run(args.fold, model, train_path, output_path)
