@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 
 from sklearn import tree, metrics
 import joblib
@@ -34,6 +35,8 @@ def run(fold, model, train_path, output_path):
 
     joblib.dump(clf, os.path.join(output_path, f"dt_{fold}.bin"))
 
+    return accuracy, roc_auc
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -49,8 +52,14 @@ if __name__ == "__main__":
     train_path = args.train_path
     output_path = args.output_path
 
+    accuracy = list()
+    roc_auc = list()
     if args.fold is None:
         for fold in range(config.N_KFOLDS):
-            run(fold, model, train_path, output_path)
+            acc, roc = run(fold, model, train_path, output_path)
+            accuracy.append(acc)
+            roc_auc.append(roc)
+        print(f"Average accruacy: {np.mean(np.asarray(accuracy))}")
+        print(f"Average Roc Auc: {np.mean(np.asarray(roc_auc))}")
     else:
-        run(args.fold, model, train_path, output_path)
+        acc, roc = run(args.fold, model, train_path, output_path)
