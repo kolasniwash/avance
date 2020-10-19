@@ -33,7 +33,7 @@ def run(fold, model, train_path, output_path):
 
     print(f"Fold={fold}, Accuracy={accuracy}, ROC_AUC={roc_auc}")
 
-    joblib.dump(clf, os.path.join(output_path, f"dt_{fold}.bin"))
+    joblib.dump(clf, os.path.join(output_path, f"dt_{model}_{fold}.bin"))
 
     return accuracy, roc_auc
 
@@ -43,8 +43,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--fold", type=int, default=None)
     parser.add_argument("--model", type=str, default=config.DEFAULT_MODEL)
-    parser.add_argument("--train_path", type=str, default=config.TRAINING_PATH)
-    parser.add_argument("--output_path", type=str, default=config.MODEL_OUTPUT)
+    parser.add_argument("--train_path", type=str, default=os.path.join(config.DATASET_PATH,
+                                                                       config.TRAINING_FILE))
+    parser.add_argument("--output_path", type=str, default=config.MODEL_OUTPUT_DIR)
 
     args = parser.parse_args()
 
