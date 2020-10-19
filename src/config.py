@@ -12,8 +12,7 @@ HOLDOUT_FILE = "test_holdout.csv"
 TEST_FILE = "test.csv"
 
 ### MODEL PATHS
-MODEL_OUTPUT = f"../models"
-
+MODEL_OUTPUT_DIR = f"../models"
 
 
 
@@ -22,6 +21,4 @@ DEFAULT_MODEL = "tree-gini"
 
 
 
-
-SCALING = None
 DEFAULT_TEST_SIZE = 0.15
