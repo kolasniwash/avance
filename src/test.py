@@ -15,7 +15,7 @@ from sklearn import metrics
 
 
 import config
-import model_dispatcher
+
 
 def predict(test_path, model, model_dir):
 
