@@ -31,7 +31,6 @@ def predict(test_path, model, model_dir):
     roc_aucs = list()
 
     for fold, mod in enumerate(sorted(models)):
-        print(mod)
         clf = joblib.load(mod)
 
         preds = clf.predict(X)
